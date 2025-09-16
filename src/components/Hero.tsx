@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Briefcase, ArrowRight, Star, Shield, Users, Clock, Menu, X, Scale } from 'lucide-react';
+import { Search, MapPin, Briefcase, ArrowRight, Star, Shield, Users, Clock, Menu, X, Scale, Heart, Building2, Home, FileText, Gavel } from 'lucide-react';
 import SignUp from './SignUp';
+import CategoriesSection from '../components/CategoriesSection';
+import AllCategoriesModal from '../components/AllCategoriesModal';
+import DistrictModal from '../components/DistrictModal';
 
 const ModernHero = () => {
   const [searchFocus, setSearchFocus] = useState(false);
@@ -8,12 +11,99 @@ const ModernHero = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [showDistrictModal, setShowDistrictModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const navigation = [
     { name: "Find Lawyers", href: "#search" },
     { name: "Practice Areas", href: "#practice-areas" },
     { name: "About", href: "#about" },
     { name: "Resources", href: "#resources" },
+  ];
+
+  // Legal categories data
+  const legalCategories = [
+    {
+      id: 1,
+      icon: Heart,
+      title: "Family Law",
+      description: "Divorce, custody, adoption, and family matters with compassionate legal support",
+      lawyerCount: 1250,
+      color: "from-red-400 to-pink-500",
+    },
+    {
+      id: 2,
+      icon: Building2,
+      title: "Business Law",
+      description: "Corporate formation, contracts, and business disputes for growing companies",
+      lawyerCount: 980,
+      color: "from-blue-400 to-cyan-500",
+    },
+    {
+      id: 3,
+      icon: Shield,
+      title: "Criminal Defense",
+      description: "Expert criminal defense, DUI representation, and legal protection",
+      lawyerCount: 850,
+      color: "from-orange-400 to-red-500",
+    },
+    {
+      id: 4,
+      icon: Home,
+      title: "Real Estate Law",
+      description: "Property transactions, disputes, and comprehensive real estate legal services",
+      lawyerCount: 720,
+      color: "from-green-400 to-emerald-500",
+    },
+    {
+      id: 5,
+      icon: Users,
+      title: "Personal Injury",
+      description: "Accident claims, medical malpractice, and maximum compensation recovery",
+      lawyerCount: 650,
+      color: "from-purple-400 to-violet-500",
+    },
+    {
+      id: 6,
+      icon: FileText,
+      title: "Immigration Law",
+      description: "Visas, citizenship, deportation defense, and immigration solutions",
+      lawyerCount: 580,
+      color: "from-indigo-400 to-blue-500",
+    },
+    {
+      id: 7,
+      icon: Gavel,
+      title: "Employment Law",
+      description: "Workplace disputes, discrimination cases, and employee rights protection",
+      lawyerCount: 480,
+      color: "from-yellow-400 to-orange-500",
+    },
+    {
+      id: 8,
+      icon: Briefcase,
+      title: "Intellectual Property",
+      description: "Patents, trademarks, copyrights, and comprehensive IP protection",
+      lawyerCount: 380,
+      color: "from-pink-400 to-purple-500",
+    },
+    {
+      id: 9,
+      icon: Shield,
+      title: "Tax Law",
+      description: "Tax planning, disputes, and compliance for individuals and businesses",
+      lawyerCount: 320,
+      color: "from-emerald-400 to-teal-500",
+    },
+    {
+      id: 10,
+      icon: FileText,
+      title: "Contract Law",
+      description: "Contract drafting, review, and dispute resolution services",
+      lawyerCount: 290,
+      color: "from-cyan-400 to-blue-500",
+    }
   ];
 
   useEffect(() => {
@@ -24,15 +114,28 @@ const ModernHero = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Handle sign-in form submission (for demo, just logs the data)
+  // Handle sign-in form submission
   const handleSignIn = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const username = formData.get('username');
     const password = formData.get('password');
     console.log('Sign In Attempt:', { username, password });
-    // Here you would typically send this data to your backend for authentication
-    setIsSignInOpen(false); // Close dialog on submission (for demo)
+    setIsSignInOpen(false);
+  };
+
+  // Handle category selection
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setShowDistrictModal(true);
+  };
+
+  // Handle district selection
+  const handleDistrictSelect = (district) => {
+    console.log('Selected:', { category: selectedCategory, district });
+    setShowDistrictModal(false);
+    // Here you would navigate to the lawyers list or update the state accordingly
+    alert(`Finding ${selectedCategory.title} lawyers in ${district.name}...`);
   };
 
   const cn = (...classes) => classes.filter(Boolean).join(' ');
@@ -41,7 +144,6 @@ const ModernHero = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
-        {/* Gradient Orbs */}
         <div
           className="absolute w-96 h-96 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full blur-3xl animate-pulse"
           style={{
@@ -53,7 +155,6 @@ const ModernHero = () => {
         <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse delay-2000" />
 
-        {/* Floating Particles */}
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
@@ -72,7 +173,6 @@ const ModernHero = () => {
       <header className="fixed top-0 w-full bg-slate-900/80 backdrop-blur-md border-b border-white/10 z-50">
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
             <div className="flex items-center space-x-2">
               <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                 <Scale className="w-5 h-5 text-white" />
@@ -82,7 +182,6 @@ const ModernHero = () => {
               </span>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navigation.map((item) => (
                 <a
@@ -95,7 +194,6 @@ const ModernHero = () => {
               ))}
             </div>
 
-            {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
               <button onClick={() => setIsSignInOpen(true)}
                 className="text-white/80 hover:text-white transition-colors font-medium">
@@ -106,7 +204,6 @@ const ModernHero = () => {
               </button>
             </div>
 
-            {/* Mobile menu button */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -155,16 +252,9 @@ const ModernHero = () => {
         </nav>
       </header>
 
-      {/* Main Content */}
-      <div className="relative z-20 container mx-auto px-6 pt-32">
+      {/* Main Hero Content */}
+      <div className="relative z-20 container mx-auto px-6 pt-32 pb-16">
         <div className="text-center max-w-6xl mx-auto">
-          {/* Badge
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 mb-8 hover:bg-white/20 transition-all duration-300">
-            <Star className="w-4 h-4 text-yellow-400" />
-            <span className="text-white/90 text-sm font-medium">Rated #1 Legal Platform 2025</span>
-          </div> */}
-
-          {/* Main Headline */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
             <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
               Legal Help
@@ -176,48 +266,8 @@ const ModernHero = () => {
           </h1>
 
           <p className="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
-            AI-powered matching with top-rated lawyers. Get instant consultations,
-            transparent pricing, and results that matter.
+            Find qualified lawyers in your district across Sri Lanka. Choose your legal specialty and get connected instantly.
           </p>
-
-          {/* Enhanced Search Bar */}
-          <div className={`relative mb-12 transition-all duration-500 ${searchFocus ? 'transform scale-105' : ''}`}>
-            <div className="bg-white/10 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-2xl">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="relative group">
-                  <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5 group-hover:text-white/80 transition-colors" />
-                  <input
-                    type="text"
-                    placeholder="Legal Issue"
-                    className="w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/60 focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
-                    onFocus={() => setSearchFocus(true)}
-                    onBlur={() => setSearchFocus(false)}
-                  />
-                </div>
-                <div className="relative group">
-                  <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5 group-hover:text-white/80 transition-colors" />
-                  <input
-                    type="text"
-                    placeholder="Your Location"
-                    className="w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/60 focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
-                  />
-                </div>
-                <div className="relative group">
-                  <Clock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5 group-hover:text-white/80 transition-colors" />
-                  <select className="w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all duration-300 appearance-none">
-                    <option value="" className="bg-gray-800">Urgency</option>
-                    <option value="urgent" className="bg-gray-800">Urgent (24h)</option>
-                    <option value="week" className="bg-gray-800">This Week</option>
-                    <option value="month" className="bg-gray-800">This Month</option>
-                  </select>
-                </div>
-                <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl py-4 px-8 font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                  <Search className="w-5 h-5 mr-2 inline" />
-                  Find Lawyers
-                </button>
-              </div>
-            </div>
-          </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
@@ -231,12 +281,12 @@ const ModernHero = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { icon: Shield, number: "15K+", label: "Verified Lawyers" },
               { icon: Star, number: "4.9/5", label: "Client Rating" },
               { icon: Users, number: "200K+", label: "Cases Resolved" },
-              { icon: Clock, number: "24/7", label: "Support" }
+              { icon: MapPin, number: "25", label: "Districts Covered" }
             ].map((stat, i) => (
               <div key={i} className="text-center group">
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
@@ -247,27 +297,15 @@ const ModernHero = () => {
               </div>
             ))}
           </div>
-
-          {/* Practice Areas */}
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-white mb-8">Popular Practice Areas</h3>
-            <div className="flex flex-wrap justify-center gap-4 pb-10">
-              {[
-                "Personal Injury", "Family Law", "Criminal Defense",
-                "Business Law", "Real Estate", "Immigration",
-                "Employment", "Bankruptcy"
-              ].map((area, i) => (
-                <button
-                  key={i}
-                  className="bg-white/10 backdrop-blur-md border border-white/20 text-white/90 px-6 py-3 rounded-full hover:bg-gradient-to-r hover:from-blue-500/20 hover:to-purple-500/20 transition-all duration-300 transform hover:scale-105"
-                >
-                  {area}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
+
+      {/* Categories Section */}
+      <CategoriesSection
+        categories={legalCategories}
+        onCategorySelect={handleCategorySelect}
+        onViewAll={() => setShowAllCategories(true)}
+      />
 
       {/* Floating Elements */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-2xl rotate-12 animate-pulse" />
@@ -277,9 +315,27 @@ const ModernHero = () => {
       {/* Bottom Gradient Fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent" />
 
-      {isSignUpOpen && <SignUp openSignIn={()=> setIsSignInOpen(true)} onClose={ ()=>
-        setIsSignUpOpen(false)
-      }></SignUp>}
+      {/* Modals */}
+      {isSignUpOpen && (
+        <SignUp 
+          openSignIn={() => setIsSignInOpen(true)} 
+          onClose={() => setIsSignUpOpen(false)}
+        />
+      )}
+
+      <AllCategoriesModal
+        isOpen={showAllCategories}
+        onClose={() => setShowAllCategories(false)}
+        categories={legalCategories}
+        onCategorySelect={handleCategorySelect}
+      />
+
+      <DistrictModal
+        isOpen={showDistrictModal}
+        onClose={() => setShowDistrictModal(false)}
+        selectedCategory={selectedCategory}
+        onDistrictSelect={handleDistrictSelect}
+      />
 
       {/* Sign In Dialog */}
       {isSignInOpen && (
@@ -326,10 +382,9 @@ const ModernHero = () => {
               Don't have an account?{" "}
               <button
                 onClick={() => {
-                  setIsSignUpOpen(true)
-                  setIsSignInOpen(false)
-                }
-                }
+                  setIsSignUpOpen(true);
+                  setIsSignInOpen(false);
+                }}
                 className="text-blue-400 hover:text-blue-300 transition-colors"
               >
                 Sign Up
