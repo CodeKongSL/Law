@@ -53,12 +53,12 @@ const ModernHero = () => {
     setShowAllCategories(true);
   };
 
-  // Handle district selection
-  const handleDistrictSelect = (district) => {
-    console.log('Selected:', { category: selectedCategory, district });
+  // Handle final selection result (moved from district handling)
+  const handleFinalSelection = (category, district) => {
+    console.log('Selected:', { category, district });
     setShowDistrictModal(false);
     // Here you would navigate to the lawyers list or update the state accordingly
-    alert(`Finding ${selectedCategory.title} lawyers in ${district.name}...`);
+    alert(`Finding ${category.title} lawyers in ${district.name}...`);
   };
 
   const cn = (...classes) => classes.filter(Boolean).join(' ');
@@ -256,7 +256,7 @@ const ModernHero = () => {
         isOpen={showDistrictModal}
         onClose={() => setShowDistrictModal(false)}
         selectedCategory={selectedCategory}
-        onDistrictSelect={handleDistrictSelect}
+        onFinalSelection={handleFinalSelection}
       />
 
       {/* Sign In Dialog */}

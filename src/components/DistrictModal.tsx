@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { X, MapPin, Search, ArrowRight } from 'lucide-react';
 
-const DistrictModal = ({ isOpen, onClose, selectedCategory, onDistrictSelect }) => {
+const DistrictModal = ({ isOpen, onClose, selectedCategory, onFinalSelection }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Sri Lankan districts
+  // Sri Lankan districts with lawyer count data
   const districts = [
     { id: 1, name: 'Colombo', province: 'Western Province', lawyerCount: 2840 },
     { id: 2, name: 'Gampaha', province: 'Western Province', lawyerCount: 890 },
@@ -33,10 +33,23 @@ const DistrictModal = ({ isOpen, onClose, selectedCategory, onDistrictSelect }) 
     { id: 25, name: 'Kegalle', province: 'Sabaragamuwa Province', lawyerCount: 210 }
   ];
 
+  // Filter districts based on search term
   const filteredDistricts = districts.filter(district =>
     district.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     district.province.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Handle district selection
+  const handleDistrictSelect = (district) => {
+    // Call the parent function with both category and district data
+    onFinalSelection(selectedCategory, district);
+  };
+
+  // Reset search when modal closes
+  const handleClose = () => {
+    setSearchTerm('');
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -53,7 +66,7 @@ const DistrictModal = ({ isOpen, onClose, selectedCategory, onDistrictSelect }) 
               </p>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="p-2 hover:bg-white/60 rounded-full transition-colors"
             >
               <X className="w-6 h-6 text-slate-600" />
@@ -77,44 +90,56 @@ const DistrictModal = ({ isOpen, onClose, selectedCategory, onDistrictSelect }) 
 
         {/* Districts Grid */}
         <div className="p-6 overflow-y-auto max-h-[60vh]">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredDistricts.map((district) => (
-              <div
-                key={district.id}
-                onClick={() => onDistrictSelect(district)}
-                className="group bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-4 cursor-pointer hover:bg-white/80 hover:border-blue-300 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl flex items-center justify-center">
-                      <MapPin className="w-5 h-5 text-white" />
+          {filteredDistricts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredDistricts.map((district) => (
+                <div
+                  key={district.id}
+                  onClick={() => handleDistrictSelect(district)}
+                  className="group bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-4 cursor-pointer hover:bg-white/80 hover:border-blue-300 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl flex items-center justify-center">
+                        <MapPin className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-slate-800 group-hover:text-slate-900">
+                          {district.name}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {district.province}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-800 group-hover:text-slate-900">
-                        {district.name}
-                      </h3>
-                      <p className="text-xs text-slate-500">
-                        {district.province}
-                      </p>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-slate-700">
+                        {district.lawyerCount.toLocaleString()}
+                      </div>
+                      <div className="text-xs text-slate-500">lawyers</div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-1 transition-all duration-300 mt-1 ml-auto" />
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-medium text-slate-700">
-                      {district.lawyerCount}
-                    </div>
-                    <div className="text-xs text-slate-500">lawyers</div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-1 transition-all duration-300 mt-1 ml-auto" />
                   </div>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-white" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-lg font-medium text-slate-700 mb-2">No districts found</h3>
+              <p className="text-slate-500">
+                Try searching with different keywords or check your spelling.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
         <div className="bg-gradient-to-r from-slate-50 to-blue-50 p-4 border-t border-gray-200/50">
           <p className="text-center text-slate-600 text-sm">
-            Select a district to find qualified {selectedCategory?.title} lawyers in your area
+            Select a district to find qualified {selectedCategory?.title || 'legal'} professionals in your area
           </p>
         </div>
       </div>
