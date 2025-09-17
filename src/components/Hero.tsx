@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Briefcase, ArrowRight, Star, Shield, Users, Clock, Menu, X, Scale } from 'lucide-react';
-import SignUp from './SignUp';
+import { ArrowRight, Star, Shield, Users, MapPin, TrendingUp, Award, Clock } from 'lucide-react';
+import Header from '../components/Header';
+import SignInModal from '../components/SignInModal';
+import SignUpModal from '../components/SignUpModal';
 import CategoriesSection from '../components/CategoriesSection';
 import AllCategoriesModal from '../components/AllCategoriesModal';
 import DistrictModal from '../components/DistrictModal';
 
 const ModernHero = () => {
-  const [searchFocus, setSearchFocus] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
@@ -16,29 +15,18 @@ const ModernHero = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
 
-  const navigation = [
-    { name: "Find Lawyers", href: "#search" },
-    { name: "Practice Areas", href: "#practice-areas" },
-    { name: "About", href: "#about" },
-    { name: "Resources", href: "#resources" },
-  ];
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   // Handle sign-in form submission
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const username = formData.get('username');
-    const password = formData.get('password');
-    console.log('Sign In Attempt:', { username, password });
+  const handleSignIn = (userData) => {
+    console.log('Sign In Attempt:', userData);
     setIsSignInOpen(false);
+    // Handle sign-in logic here
+  };
+
+  // Handle sign-up form submission
+  const handleSignUp = (userData) => {
+    console.log('Sign Up Attempt:', userData);
+    setIsSignUpOpen(false);
+    // Handle sign-up logic here
   };
 
   // Handle category selection
@@ -53,197 +41,173 @@ const ModernHero = () => {
     setShowAllCategories(true);
   };
 
-  // Handle final selection result (moved from district handling)
+  // Handle final selection result
   const handleFinalSelection = (category, district) => {
     console.log('Selected:', { category, district });
     setShowDistrictModal(false);
-    // Here you would navigate to the lawyers list or update the state accordingly
     alert(`Finding ${category.title} lawyers in ${district.name}...`);
   };
 
-  const cn = (...classes) => classes.filter(Boolean).join(' ');
+  const stats = [
+    { 
+      icon: Shield, 
+      number: "15K+", 
+      label: "Verified Lawyers",
+      description: "Bar-certified professionals"
+    },
+    { 
+      icon: Star, 
+      number: "4.9/5", 
+      label: "Client Rating",
+      description: "Based on 50K+ reviews"
+    },
+    { 
+      icon: Users, 
+      number: "200K+", 
+      label: "Cases Resolved",
+      description: "Successfully handled"
+    },
+    { 
+      icon: MapPin, 
+      number: "25", 
+      label: "Districts Covered",
+      description: "Across Sri Lanka"
+    }
+  ];
+
+  const features = [
+    {
+      icon: TrendingUp,
+      title: "Instant Matching",
+      description: "Get matched with qualified lawyers in minutes"
+    },
+    {
+      icon: Award,
+      title: "Verified Experts",
+      description: "All lawyers are bar-certified and verified"
+    },
+    {
+      icon: Clock,
+      title: "24/7 Support",
+      description: "Round-the-clock legal assistance available"
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Animated Background */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
+      {/* Subtle Background Pattern */}
       <div className="absolute inset-0">
-        <div
-          className="absolute w-96 h-96 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full blur-3xl animate-pulse"
-          style={{
-            left: `${mousePosition.x * 0.01}%`,
-            top: `${mousePosition.y * 0.01}%`,
-            transition: 'all 0.3s ease'
-          }}
-        />
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse delay-2000" />
-
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 4}s`
-            }}
-          />
-        ))}
+        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-100/40 to-indigo-100/40 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-indigo-100/30 to-purple-100/30 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-gradient-to-r from-cyan-100/40 to-blue-100/40 rounded-full blur-3xl animate-pulse delay-2000" />
+        
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2760%27%20height%3D%2760%27%20viewBox%3D%270%200%2060%2060%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cg%20fill%3D%27none%27%20fill-rule%3D%27evenodd%27%3E%3Cg%20fill%3D%27%239CA3AF%27%20fill-opacity%3D%270.05%27%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2730%27%20r%3D%271.5%27/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
       </div>
 
       {/* Header */}
-      <header className="fixed top-0 w-full bg-slate-900/80 backdrop-blur-md border-b border-white/10 z-50">
-        <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                <Scale className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                LawyerSL
-              </span>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-white/70 hover:text-white transition-colors font-medium"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              <button onClick={() => setIsSignInOpen(true)}
-                className="text-white/80 hover:text-white transition-colors font-medium">
-                Sign In
-              </button>
-              <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105">
-                Join as Lawyer
-              </button>
-            </div>
-
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          <div
-            className={cn(
-              "md:hidden transition-all duration-300 ease-in-out",
-              isMenuOpen
-                ? "max-h-96 opacity-100 py-4"
-                : "max-h-0 opacity-0 overflow-hidden"
-            )}
-          >
-            <div className="flex flex-col space-y-4">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-white/70 hover:text-white transition-colors font-medium px-2 py-1"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
-              ))}
-              <div className="flex flex-col space-y-2 pt-4 border-t border-white/20">
-                <button onClick={() => setIsSignInOpen(true)}
-                  className="text-white/80 hover:text-white transition-colors font-medium text-left px-2 py-1">
-                  Sign In
-                </button>
-                <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm">
-                  Join as Lawyer
-                </button>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </header>
+      <Header onSignInOpen={() => setIsSignInOpen(true)} />
 
       {/* Main Hero Content */}
-      <div className="relative z-20 container mx-auto px-6 pt-32 pb-16">
+      <div className="relative z-20 container mx-auto px-6 pt-32 pb-20">
         <div className="text-center max-w-6xl mx-auto">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-            <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-              Legal Help
-            </span>
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-              Reimagined
-            </span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Find qualified lawyers in your district across Sri Lanka. Choose your legal specialty and get connected instantly.
-          </p>
+          {/* Hero Title */}
+          <div className="mb-8">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                Legal Help
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Reimagined
+              </span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Find qualified lawyers in your district across Sri Lanka. Choose your legal specialty and get connected with verified professionals instantly.
+            </p>
+          </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <button className="group bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-10 py-5 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
+            <button className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-5 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
               Get Free Consultation
               <ArrowRight className="w-5 h-5 ml-2 inline group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-white/10 backdrop-blur-md border border-white/30 text-white px-10 py-5 rounded-2xl font-semibold text-lg hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-              Join Our Network
+            <button className="bg-white/80 backdrop-blur-md border-2 border-gray-200 text-gray-700 px-10 py-5 rounded-2xl font-semibold text-lg hover:bg-white hover:border-gray-300 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+              Browse Lawyers
             </button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { icon: Shield, number: "15K+", label: "Verified Lawyers" },
-              { icon: Star, number: "4.9/5", label: "Client Rating" },
-              { icon: Users, number: "200K+", label: "Cases Resolved" },
-              { icon: MapPin, number: "25", label: "Districts Covered" }
-            ].map((stat, i) => (
-              <div key={i} className="text-center group">
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-                  <stat.icon className="w-8 h-8 text-blue-400 mx-auto mb-3 group-hover:text-blue-300 transition-colors" />
-                  <div className="text-3xl font-bold text-white mb-1">{stat.number}</div>
-                  <div className="text-white/70 text-sm">{stat.label}</div>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            {stats.map((stat, i) => (
+              <div key={i} className="group">
+                <div className="bg-white/70 backdrop-blur-md rounded-3xl p-8 border border-gray-200/50 hover:bg-white hover:shadow-xl hover:border-gray-300/50 transition-all duration-300 transform hover:scale-105">
+                  <div className="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl p-4 w-fit mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <stat.icon className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                  <div className="text-gray-800 font-medium mb-1">{stat.label}</div>
+                  <div className="text-gray-600 text-sm">{stat.description}</div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Features Section */}
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose LawyerSL?
+            </h2>
+            <p className="text-xl text-gray-600 mb-12">
+              Experience the future of legal services with our modern approach
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {features.map((feature, i) => (
+                <div key={i} className="group">
+                  <div className="bg-white/60 backdrop-blur-md rounded-2xl p-8 border border-gray-200/50 hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                    <div className="bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl p-3 w-fit mx-auto mb-6 group-hover:scale-110 transition-transform">
+                      <feature.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Categories Section */}
-      <CategoriesSection
-        onCategorySelect={handleCategorySelect}
-        onViewAll={handleViewAllCategories}
-      />
+      <div className="relative z-20">
+        <CategoriesSection
+          onCategorySelect={handleCategorySelect}
+          onViewAll={handleViewAllCategories}
+        />
+      </div>
 
-      {/* Floating Elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-2xl rotate-12 animate-pulse" />
-      <div className="absolute top-40 right-20 w-16 h-16 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full animate-bounce" />
-      <div className="absolute bottom-40 left-20 w-12 h-12 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 rounded-lg rotate-45 animate-pulse delay-1000" />
-
-      {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent" />
+      {/* Decorative Elements */}
+      <div className="absolute top-32 left-10 w-20 h-20 bg-gradient-to-r from-blue-200/30 to-indigo-200/30 rounded-2xl rotate-12 animate-pulse" />
+      <div className="absolute top-48 right-20 w-16 h-16 bg-gradient-to-r from-indigo-200/30 to-purple-200/30 rounded-full animate-bounce" />
+      <div className="absolute bottom-40 left-20 w-12 h-12 bg-gradient-to-r from-cyan-200/30 to-blue-200/30 rounded-lg rotate-45 animate-pulse delay-1000" />
 
       {/* Modals */}
-      {isSignUpOpen && (
-        <SignUp 
-          openSignIn={() => setIsSignInOpen(true)} 
-          onClose={() => setIsSignUpOpen(false)}
-        />
-      )}
+      <SignInModal
+        isOpen={isSignInOpen}
+        onClose={() => setIsSignInOpen(false)}
+        onSignUpOpen={() => setIsSignUpOpen(true)}
+        onSubmit={handleSignIn}
+      />
+
+      <SignUpModal
+        isOpen={isSignUpOpen}
+        onClose={() => setIsSignUpOpen(false)}
+        onSignInOpen={() => setIsSignInOpen(true)}
+        onSubmit={handleSignUp}
+      />
 
       <AllCategoriesModal
         isOpen={showAllCategories}
@@ -258,63 +222,6 @@ const ModernHero = () => {
         selectedCategory={selectedCategory}
         onFinalSelection={handleFinalSelection}
       />
-
-      {/* Sign In Dialog */}
-      {isSignInOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 w-full max-w-md mx-4 shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Sign In</h2>
-              <button
-                onClick={() => setIsSignInOpen(false)}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <form onSubmit={handleSignIn}>
-              <div className="mb-4">
-                <label className="block text-white/80 mb-2">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  className="w-full bg-white/5 border border-white/20 rounded-xl p-3 text-white placeholder-white/60 focus:outline-none focus:border-blue-400 focus:bg-white/10 transition-all duration-300"
-                  placeholder="Enter your username"
-                  required
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-white/80 mb-2">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="w-full bg-white/5 border border-white/20 rounded-xl p-3 text-white placeholder-white/60 focus:outline-none focus:border-blue-400 focus:bg-white/10 transition-all duration-300"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                Sign In
-              </button>
-            </form>
-            <p className="text-white/70 text-center mt-4">
-              Don't have an account?{" "}
-              <button
-                onClick={() => {
-                  setIsSignUpOpen(true);
-                  setIsSignInOpen(false);
-                }}
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                Sign Up
-              </button>
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
