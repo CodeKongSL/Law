@@ -1,12 +1,96 @@
 import { useState } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Heart, Building2, Shield, Home, Users, FileText, Gavel, Briefcase } from 'lucide-react';
 import CategoryCard from './CategoryCard';
 
-const CategoriesSection = ({ categories, onCategorySelect, onViewAll }) => {
+const CategoriesSection = ({ onCategorySelect, onViewAll }) => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
+  // Legal categories data moved from Hero section
+  const legalCategories = [
+    {
+      id: 1,
+      icon: Heart,
+      title: "Family Law",
+      description: "Divorce, custody, adoption, and family matters with compassionate legal support",
+      lawyerCount: 1250,
+      color: "from-red-400 to-pink-500",
+    },
+    {
+      id: 2,
+      icon: Building2,
+      title: "Business Law",
+      description: "Corporate formation, contracts, and business disputes for growing companies",
+      lawyerCount: 980,
+      color: "from-blue-400 to-cyan-500",
+    },
+    {
+      id: 3,
+      icon: Shield,
+      title: "Criminal Defense",
+      description: "Expert criminal defense, DUI representation, and legal protection",
+      lawyerCount: 850,
+      color: "from-orange-400 to-red-500",
+    },
+    {
+      id: 4,
+      icon: Home,
+      title: "Real Estate Law",
+      description: "Property transactions, disputes, and comprehensive real estate legal services",
+      lawyerCount: 720,
+      color: "from-green-400 to-emerald-500",
+    },
+    {
+      id: 5,
+      icon: Users,
+      title: "Personal Injury",
+      description: "Accident claims, medical malpractice, and maximum compensation recovery",
+      lawyerCount: 650,
+      color: "from-purple-400 to-violet-500",
+    },
+    {
+      id: 6,
+      icon: FileText,
+      title: "Immigration Law",
+      description: "Visas, citizenship, deportation defense, and immigration solutions",
+      lawyerCount: 580,
+      color: "from-indigo-400 to-blue-500",
+    },
+    {
+      id: 7,
+      icon: Gavel,
+      title: "Employment Law",
+      description: "Workplace disputes, discrimination cases, and employee rights protection",
+      lawyerCount: 480,
+      color: "from-yellow-400 to-orange-500",
+    },
+    {
+      id: 8,
+      icon: Briefcase,
+      title: "Intellectual Property",
+      description: "Patents, trademarks, copyrights, and comprehensive IP protection",
+      lawyerCount: 380,
+      color: "from-pink-400 to-purple-500",
+    },
+    {
+      id: 9,
+      icon: Shield,
+      title: "Tax Law",
+      description: "Tax planning, disputes, and compliance for individuals and businesses",
+      lawyerCount: 320,
+      color: "from-emerald-400 to-teal-500",
+    },
+    {
+      id: 10,
+      icon: FileText,
+      title: "Contract Law",
+      description: "Contract drafting, review, and dispute resolution services",
+      lawyerCount: 290,
+      color: "from-cyan-400 to-blue-500",
+    }
+  ];
+
   // Show only first 6 categories initially
-  const displayedCategories = categories.slice(0, 6);
+  const displayedCategories = legalCategories.slice(0, 6);
 
   return (
     <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 relative overflow-hidden">
@@ -56,7 +140,7 @@ const CategoriesSection = ({ categories, onCategorySelect, onViewAll }) => {
         {/* View All Button */}
         <div className="text-center">
           <button
-            onClick={onViewAll}
+            onClick={() => onViewAll(legalCategories)}
             className="group inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
           >
             View All Legal Categories
@@ -64,7 +148,7 @@ const CategoriesSection = ({ categories, onCategorySelect, onViewAll }) => {
           </button>
 
           <p className="text-slate-500 mt-6 text-sm">
-            Explore all {categories.length} legal practice areas available on our platform
+            Explore all {legalCategories.length} legal practice areas available on our platform
           </p>
         </div>
       </div>
