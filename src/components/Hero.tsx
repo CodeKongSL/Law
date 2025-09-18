@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { ArrowRight, Star, Shield, Users, MapPin, TrendingUp, Award, Clock } from 'lucide-react';
 import Header from '../components/Header';
 import SignInModal from '../components/SignInModal';
@@ -7,46 +6,45 @@ import CategoriesSection from '../components/CategoriesSection';
 import AllCategoriesModal from '../components/AllCategoriesModal';
 import DistrictModal from '../components/DistrictModal';
 
-const ModernHero = () => {
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
-  const [showAllCategories, setShowAllCategories] = useState(false);
-  const [showDistrictModal, setShowDistrictModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [allCategories, setAllCategories] = useState([]);
+interface HeroProps {
+  onSignIn: (userData: any) => void;
+  onSignUp: (userData: any) => void;
+  onCategorySelect: (category: any) => void;
+  onViewAllCategories: (categories: any[]) => void;
+  onDistrictSelect: (category: any, district: any) => void;
+  isSignInOpen: boolean;
+  isSignUpOpen: boolean;
+  showAllCategories: boolean;
+  showDistrictModal: boolean;
+  selectedCategory: any;
+  allCategories: any[];
+  onSignInModalClose: () => void;
+  onSignUpModalClose: () => void;
+  onAllCategoriesModalClose: () => void;
+  onDistrictModalClose: () => void;
+  onSignInModalOpenSignUp: () => void;
+  onSignUpModalOpenSignIn: () => void;
+}
 
-  // Handle sign-in form submission
-  const handleSignIn = (userData) => {
-    console.log('Sign In Attempt:', userData);
-    setIsSignInOpen(false);
-    // Handle sign-in logic here
-  };
-
-  // Handle sign-up form submission
-  const handleSignUp = (userData) => {
-    console.log('Sign Up Attempt:', userData);
-    setIsSignUpOpen(false);
-    // Handle sign-up logic here
-  };
-
-  // Handle category selection
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    setShowDistrictModal(true);
-  };
-
-  // Handle view all categories
-  const handleViewAllCategories = (categories) => {
-    setAllCategories(categories);
-    setShowAllCategories(true);
-  };
-
-  // Handle final selection result
-  const handleFinalSelection = (category, district) => {
-    console.log('Selected:', { category, district });
-    setShowDistrictModal(false);
-    alert(`Finding ${category.title} lawyers in ${district.name}...`);
-  };
+const ModernHero = ({
+  onSignIn,
+  onSignUp,
+  onCategorySelect,
+  onViewAllCategories,
+  onDistrictSelect,
+  isSignInOpen,
+  isSignUpOpen,
+  showAllCategories,
+  showDistrictModal,
+  selectedCategory,
+  allCategories,
+  onSignInModalClose,
+  onSignUpModalClose,
+  onAllCategoriesModalClose,
+  onDistrictModalClose,
+  onSignInModalOpenSignUp,
+  onSignUpModalOpenSignIn,
+}: HeroProps) => {
 
   const stats = [
     { 
@@ -106,7 +104,7 @@ const ModernHero = () => {
       </div>
 
       {/* Header */}
-      <Header onSignInOpen={() => setIsSignInOpen(true)} />
+      <Header onSignInOpen={onSignInModalOpenSignUp} />
 
       {/* Main Hero Content */}
       <div className="relative z-20 container mx-auto px-6 pt-32 pb-20">
@@ -204,8 +202,8 @@ const ModernHero = () => {
       {/* Categories Section */}
       <div className="relative z-20">
         <CategoriesSection
-          onCategorySelect={handleCategorySelect}
-          onViewAll={handleViewAllCategories}
+          onCategorySelect={onCategorySelect}
+          onViewAll={onViewAllCategories}
         />
       </div>
 
@@ -217,30 +215,30 @@ const ModernHero = () => {
       {/* Modals */}
       <SignInModal
         isOpen={isSignInOpen}
-        onClose={() => setIsSignInOpen(false)}
-        onSignUpOpen={() => setIsSignUpOpen(true)}
-        onSubmit={handleSignIn}
+        onClose={onSignInModalClose}
+        onSignUpOpen={onSignInModalOpenSignUp}
+        onSubmit={onSignIn}
       />
 
       <SignUpModal
         isOpen={isSignUpOpen}
-        onClose={() => setIsSignUpOpen(false)}
-        onSignInOpen={() => setIsSignInOpen(true)}
-        onSubmit={handleSignUp}
+        onClose={onSignUpModalClose}
+        onSignInOpen={onSignUpModalOpenSignIn}
+        onSubmit={onSignUp}
       />
 
       <AllCategoriesModal
         isOpen={showAllCategories}
-        onClose={() => setShowAllCategories(false)}
+        onClose={onAllCategoriesModalClose}
         categories={allCategories}
-        onCategorySelect={handleCategorySelect}
+        onCategorySelect={onCategorySelect}
       />
 
       <DistrictModal
         isOpen={showDistrictModal}
-        onClose={() => setShowDistrictModal(false)}
+        onClose={onDistrictModalClose}
         selectedCategory={selectedCategory}
-        onFinalSelection={handleFinalSelection}
+        onFinalSelection={onDistrictSelect}
       />
     </div>
   );
