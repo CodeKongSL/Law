@@ -71,44 +71,44 @@ const CalendarSlots = ({ selectedDate, onDateSelect, onSlotSelect, generateTimeS
       {/* Calendar */}
       <div className="bg-white/40 rounded-xl p-4 border border-gray-200/30">
         {/* Calendar Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3 lg:mb-2">
           <button
             onClick={goToPreviousMonth}
-            className="p-2 hover:bg-white/60 rounded-full transition-colors"
+            className="p-2 hover:bg-white/60 rounded-full transition-colors lg:p-1"
             disabled={
               currentMonth.getFullYear() === today.getFullYear() &&
               currentMonth.getMonth() <= today.getMonth()
             }
           >
-            <ChevronLeft className="w-5 h-5 text-slate-600" />
+            <ChevronLeft className="w-5 h-5 text-slate-600 lg:w-4 lg:h-4" />
           </button>
           
-          <h4 className="text-lg font-semibold text-slate-800">
+          <h4 className="text-lg font-semibold text-slate-800 lg:text-base">
             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </h4>
           
           <button
             onClick={goToNextMonth}
-            className="p-2 hover:bg-white/60 rounded-full transition-colors"
+            className="p-2 hover:bg-white/60 rounded-full transition-colors lg:p-1"
           >
-            <ChevronRight className="w-5 h-5 text-slate-600" />
+            <ChevronRight className="w-5 h-5 text-slate-600 lg:w-4 lg:h-4" />
           </button>
         </div>
         
         {/* Day Names */}
         <div className="grid grid-cols-7 gap-1 mb-2">
           {dayNames.map((day) => (
-            <div key={day} className="text-center text-sm font-medium text-slate-600 py-2">
+            <div key={day} className="text-center text-sm font-medium text-slate-600 py-2 lg:py-1 lg:text-xs">
               {day}
             </div>
           ))}
         </div>
         
         {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1 lg:gap-0.5">
           {calendarDays.map((date, index) => {
             if (!date) {
-              return <div key={index} className="aspect-square"></div>;
+              return <div key={index} className="aspect-square lg:h-8 lg:aspect-auto"></div>;
             }
             
             const isSelected = selectedDate && formatDate(date) === formatDate(selectedDate);
@@ -121,7 +121,7 @@ const CalendarSlots = ({ selectedDate, onDateSelect, onSlotSelect, generateTimeS
                 onClick={() => !isDisabled && onDateSelect(date)}
                 disabled={isDisabled}
                 className={`
-                  aspect-square flex items-center justify-center text-sm rounded-lg transition-all duration-200
+                  aspect-square lg:h-8 lg:aspect-auto flex items-center justify-center text-sm lg:text-xs rounded-lg transition-all duration-200
                   ${isSelected
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                     : isToday
@@ -138,7 +138,7 @@ const CalendarSlots = ({ selectedDate, onDateSelect, onSlotSelect, generateTimeS
           })}
         </div>
         
-        <div className="mt-4 text-xs text-slate-500 text-center">
+        <div className="mt-4 text-xs text-slate-500 text-center lg:mt-2 lg:text-xs">
           Sundays are not available for appointments
         </div>
       </div>
