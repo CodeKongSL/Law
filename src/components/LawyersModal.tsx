@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { X, Search, Star, MapPin, Award, Calendar, User, Briefcase } from 'lucide-react';
+import BookingPage from './BookingPage';
 
 const LawyersModal = ({ isOpen, onClose, selectedCategory, selectedDistrict }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showReviews, setShowReviews] = useState(false);
   const [selectedLawyerReviews, setSelectedLawyerReviews] = useState(null);
+  const [showBookingPage, setShowBookingPage] = useState(false);
+  const [selectedLawyerForBooking, setSelectedLawyerForBooking] = useState(null);
 
   // Generate sample lawyers based on district and category
   const generateLawyers = () => {
@@ -156,6 +159,8 @@ const LawyersModal = ({ isOpen, onClose, selectedCategory, selectedDistrict }) =
   // Reset search when modal closes
   const handleClose = () => {
     setSearchTerm('');
+    setShowBookingPage(false);
+    setSelectedLawyerForBooking(null);
     onClose();
   };
 
@@ -282,7 +287,13 @@ const LawyersModal = ({ isOpen, onClose, selectedCategory, selectedDistrict }) =
 
                   {/* Action Button */}
                   <div className="pt-4 border-t border-gray-200/50">
-                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 text-sm sm:text-base">
+                    <button 
+                      onClick={() => {
+                        setSelectedLawyerForBooking(lawyer);
+                        setShowBookingPage(true);
+                      }}
+                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 text-sm sm:text-base"
+                    >
                       <Calendar className="w-4 h-4" />
                       Book Consultation
                     </button>
@@ -311,7 +322,7 @@ const LawyersModal = ({ isOpen, onClose, selectedCategory, selectedDistrict }) =
         </div>
       </div>
 
-      {/* Reviews Modal */}
+        {/* Reviews Modal */}
         {showReviews && selectedLawyerReviews && (
           <div className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-2 sm:p-4">
             <div className="bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl sm:rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl">
@@ -374,6 +385,16 @@ const LawyersModal = ({ isOpen, onClose, selectedCategory, selectedDistrict }) =
               </div>
             </div>
           </div>
+        )}
+        {/* Booking Page */}
+        {showBookingPage && selectedLawyerForBooking && (
+          <BookingPage
+            lawyer={selectedLawyerForBooking}
+            onBack={() => {
+              setShowBookingPage(false);
+              setSelectedLawyerForBooking(null);
+            }}
+          />
         )}
     </div>
   );
