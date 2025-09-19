@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Calendar, Clock, DollarSign, Star, MapPin, User, Briefcase } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, DollarSign, Star, MapPin, User, Briefcase, X } from 'lucide-react';
 import CalendarSlots from './CalendarSlots';
 import BookingDetailsModal from './BookingDetailsModal';
 
@@ -7,6 +7,7 @@ const BookingPage = ({ lawyer, onBack }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
 
   // Mock consultation fees
   const consultationFee = {
@@ -95,7 +96,12 @@ const BookingPage = ({ lawyer, onBack }) => {
                   <div className="flex items-center gap-2 mb-2">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold text-slate-700">{lawyer.rating}</span>
-                    <span className="text-slate-500 text-sm">({lawyer.reviewCount} reviews)</span>
+                    <button 
+                      onClick={() => setShowReviews(true)}
+                      className="text-slate-500 text-sm hover:text-blue-600 hover:underline transition-colors"
+                    >
+                      ({lawyer.reviewCount} reviews)
+                    </button>
                   </div>
                   <div className="space-y-1 text-sm text-slate-600">
                     <div className="flex items-center gap-2">
@@ -213,7 +219,12 @@ const BookingPage = ({ lawyer, onBack }) => {
                   <div className="flex items-center gap-2 mb-2">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold text-slate-700">{lawyer.rating}</span>
-                    <span className="text-slate-500 text-sm">({lawyer.reviewCount} reviews)</span>
+                    <button 
+                      onClick={() => setShowReviews(true)}
+                      className="text-slate-500 text-sm hover:text-blue-600 hover:underline transition-colors"
+                    >
+                      ({lawyer.reviewCount} reviews)
+                    </button>
                   </div>
                   <div className="space-y-1 text-sm text-slate-600">
                     <div className="flex items-center justify-center gap-2">
@@ -315,6 +326,71 @@ const BookingPage = ({ lawyer, onBack }) => {
           <div className="h-6"></div>
         </div>
       </div>
+
+      {/* Reviews Modal */}
+      {showReviews && lawyer && (
+        <div className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-2 sm:p-4">
+          <div className="bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl sm:rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl">
+            {/* Reviews Header */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 sm:p-6 border-b border-gray-200/50">
+              <div className="flex justify-between items-start">
+                <div className="flex-1 pr-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-800 mb-1">
+                    Reviews for {lawyer.name}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="font-semibold text-slate-700">{lawyer.rating}</span>
+                    </div>
+                    <span className="text-slate-500 text-sm">({lawyer.reviewCount} reviews)</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowReviews(false)}
+                  className="p-2 hover:bg-white/60 rounded-full transition-colors flex-shrink-0"
+                >
+                  <X className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600" />
+                </button>
+              </div>
+            </div>
+
+            {/* Reviews List */}
+            <div className="p-4 sm:p-6 overflow-y-auto max-h-[70vh]">
+              <div className="space-y-4">
+                {lawyer.reviews && lawyer.reviews.map((review) => (
+                  <div key={review.id} className="bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-xl p-4 hover:bg-white/80 transition-all duration-300">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                        </div>
+                        <div>
+                          <span className="text-sm sm:text-base font-medium text-slate-800">{review.name}</span>
+                          <div className="flex items-center gap-1 mt-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`w-3 h-3 sm:w-4 sm:h-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-xs sm:text-sm text-slate-500">
+                        {new Date(review.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                      {review.comment}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Booking Details Modal */}
       <BookingDetailsModal
