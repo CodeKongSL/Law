@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Scale, Download, Smartphone } from 'lucide-react';
+import { smoothScrollTo } from '../lib/smoothScroll';
 
 const Header = ({ onSignInOpen }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,11 +30,18 @@ const Header = ({ onSignInOpen }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  const handleNavigation = (href: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    smoothScrollTo(targetId);
+    setIsMenuOpen(false); // Close mobile menu if open
+  };
+
   const navigation = [
-    { name: "Find Lawyers", href: "#search" },
-    { name: "Practice Areas", href: "#practice-areas" },
+    { name: "Home", href: "#search" },
+    { name: "Find Lawyers", href: "#practice-areas" },
     { name: "About", href: "#about" },
-    { name: "Resources", href: "#resources" },
+    { name: "Contact Us", href: "#resources" },
   ];
 
   const cn = (...classes) => classes.filter(Boolean).join(' ');
@@ -75,6 +83,7 @@ const Header = ({ onSignInOpen }) => {
                 <a
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => handleNavigation(item.href, e)}
                   className="text-gray-800 hover:text-gray-900 transition-colors font-normal relative group"
                 >
                   {item.name}
@@ -131,7 +140,7 @@ const Header = ({ onSignInOpen }) => {
                         key={item.name}
                         href={item.href}
                         className="text-gray-800 hover:text-blue-600 hover:bg-white/50 backdrop-blur-sm transition-all duration-200 font-normal px-4 py-3 rounded-xl text-center w-full max-w-xs"
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={(e) => handleNavigation(item.href, e)}
                       >
                         {item.name}
                       </a>

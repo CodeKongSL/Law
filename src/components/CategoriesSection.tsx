@@ -93,7 +93,7 @@ const CategoriesSection = ({ onCategorySelect, onViewAll }) => {
   const displayedCategories = legalCategories.slice(0, 6);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 relative overflow-hidden">
+    <section id="practice-areas" className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-full blur-3xl animate-pulse" />
