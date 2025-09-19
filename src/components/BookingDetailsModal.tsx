@@ -22,7 +22,15 @@ const BookingDetailsModal = ({
     agreeToTerms: false
   });
 
-  const [errors, setErrors] = useState({});
+  type Errors = {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    caseDescription?: string;
+    agreeToTerms?: string;
+  };
+
+  const [errors, setErrors] = useState<Errors>({});
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,7 +49,7 @@ const BookingDetailsModal = ({
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Errors = {};
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
