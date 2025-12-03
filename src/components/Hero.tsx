@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ArrowRight, Star, Shield, Users, MapPin, TrendingUp, Award, Clock } from 'lucide-react';
 import Header from '../components/Header';
 import SignInModal from '../components/SignInModal';

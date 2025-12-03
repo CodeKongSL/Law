@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import FeaturedLawyers from "@/components/FeaturedLawyers";
@@ -7,13 +7,28 @@ import CategoriesSection from "@/components/CategoriesSection";
 import AllCategoriesModal from "@/components/AllCategoriesModal";
 import DistrictModal from "@/components/DistrictModal";
 import LawyersModal from "@/components/LawyersModal";
-import { legalCategories } from '@/data/categories';
+import { CategoryModel } from '@/data/categories';
+import { getLawCategories } from '@/service/LawCategoryService';
+
+
 
 const Index = () => {
   // Category and District state
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [allCategories, setAllCategories] = useState(legalCategories);
+  // const [allCategories, setAllCategories] = useState(legalCategories);
+  const [fetchedCategories, setFetchedCategories] = useState([]);
+
+  useEffect(()=>{
+    getLawCategories()
+    .then(data=>{
+      setFetchedCategories(data);
+      console.log("Fetched Categories:", JSON.stringify(data));
+    }).catch(error=>{
+      throw error;
+    })
+  },[])
+  
   
   // Modal states
   const [showAllCategories, setShowAllCategories] = useState(false);
@@ -41,8 +56,9 @@ const Index = () => {
   };
 
   // Handle view all categories
-  const handleViewAllCategories = (categories) => {
-    setAllCategories(categories);
+  const handleViewAllCategories = (categories: CategoryModel[]) => {
+    // setAllCategories(categories);
+    setFetchedCategories(categories);
     setShowAllCategories(true);
   };
 
@@ -96,7 +112,7 @@ const Index = () => {
           onViewAllCategories={handleViewAllCategories}
           showAllCategories={showAllCategories}
           onAllCategoriesModalClose={handleAllCategoriesModalClose}
-          allCategories={allCategories}
+          allCategories={fetchedCategories}
           
           // District selection props
           showDistrictModal={showDistrictModal}
